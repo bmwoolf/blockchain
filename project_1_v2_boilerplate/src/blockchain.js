@@ -66,17 +66,16 @@ class Blockchain {
     _addBlock(block) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-            try {
-                block.height = self.chain.length;
+                let chainHeight = await this.getChainHeight();
+                block.height = chainHeight;
                 block.time = new Date().getTime().toString().slice(0,-3);
-                if (self.chain.length > 0) {
-                    block.previousBlockHash = self.chain[self.chain.length - 1];
+                if (chainHeight > 0) {
+                    block.previousBlockHash = self.chain[self.chain.length - 1].hash;
                     block.hash = SHA256(JSON.stringify(block)).toString();
-                    resolve(self.chain.push(block))
+                    resolve(self.chain.push(block));
+                    block.height = chainHeight + 1;
                 }
-            } catch (err){
                 reject(new Error(err)); 
-            }
         });
     }
 
@@ -115,7 +114,6 @@ class Blockchain {
     submitStar(address, message, signature, star) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-            try {
                 let time = parseInt(message.split(':')[1]);
                 let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
 
@@ -134,9 +132,8 @@ class Blockchain {
                     // add to chain
                     resolve(await self._addBlock(block));
                 }
-            } catch {
+
                 reject(new Error('Block must be verified within 5 minutes.'))
-            }
         });
     }
 

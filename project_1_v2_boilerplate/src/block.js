@@ -55,26 +55,6 @@ class Block {
         });
     }
 
-    validate() {
-    let self = this;
-    return new Promise((resolve, reject) => {
-      try {
-        // Save in auxiliary variable the current block hash
-        const currentHash = self.hash;
-        self.hash = null;
-        // Recalculate the hash of the Block
-        const newHash = SHA256(JSON.stringify(self)).toString();
-        // Comparing if the hashes changed
-        self.hash = currentHash;
-        // Returning the Block is not valid
-        resolve(currentHash === newHash);
-        // Returning the Block is valid
-      } catch (err) {
-        reject(new Error(err)); 
-      }
-    });
-  }
-
     /**
      *  Auxiliary Method to return the block body (decoding the data)
      *  Steps:
@@ -88,6 +68,9 @@ class Block {
         // Getting the encoded data saved in the Block
         // Decoding the data to retrieve the JSON representation of the object
         // Parse the data to an object to be retrieve.
+        if (this.height === 0) {
+            return 'No chain, need to create a genesis block.'
+        }
         console.log('in getBData')
        let encoded = this.body;
        let ascii = hex2ascii(encoded);
