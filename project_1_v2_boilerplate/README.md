@@ -17,9 +17,9 @@ you will implement in your private blockchain.
 
 ## What problem will you solve implementing this private Blockchain application?
 
-Your employer is trying to make a test of concept on how a Blockchain application can be implemented in his company.
-He is an astronomy fans and he spend most of his free time on searching stars in the sky, that's why he would like
-to create a test application that will allows him to register stars, and also some others of his friends can register stars
+You are trying to make a test of concept on how a Blockchain application can be implemented in your company.
+You are an astronomy fan and spend most of your free time on searching stars in the sky, that's why you would like
+to create a test application that will allows you to register stars, and also some others of your friends can register stars
 too but making sure the application know who owned each star.
 
 ### What is the process describe by the employer to be implemented in the application?
