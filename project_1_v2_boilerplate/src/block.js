@@ -18,7 +18,7 @@ class Block {
 	constructor(data){
 		this.hash = null;                                           // Hash of the block
 		this.height = 0;                                            // Block Height (consecutive number of each block)
-		this.body = Buffer(JSON.stringify(data)).toString('hex');   // Will contain the transactions stored in the block, by default it will encode the data
+		this.body = Buffer.from(JSON.stringify(data)).toString('hex');   // Will contain the transactions stored in the block, by default it will encode the data
 		this.time = 0;                                              // Timestamp for the Block creation
 		this.previousBlockHash = null;                              // Reference to the previous Block Hash
     }
@@ -36,6 +36,7 @@ class Block {
      *  Note: to access the class values inside a Promise code you need to create an auxiliary value `let self = this;`
      */
     validate() {
+        console.log('in validate')
         let self = this;
         return new Promise((resolve, reject) => {
             try {
@@ -50,7 +51,7 @@ class Block {
                 resolve(currentHash === newHash);
             } catch(err) {
                 // Returning if the Block is valid
-                reject(new Error(err));
+                reject(err);
             }
         });
     }
@@ -65,13 +66,13 @@ class Block {
      *     or Reject with an error.
      */
     getBData() {
+        console.log('in getBData')
         // Getting the encoded data saved in the Block
         // Decoding the data to retrieve the JSON representation of the object
         // Parse the data to an object to be retrieve.
         if (this.height === 0) {
             return 'No chain, need to create a genesis block.'
         }
-        console.log('in getBData')
        let encoded = this.body;
        let ascii = hex2ascii(encoded);
        let parsed = JSON.parse(ascii);

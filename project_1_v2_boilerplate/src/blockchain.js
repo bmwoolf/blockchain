@@ -45,6 +45,7 @@ class Blockchain {
      * Utility method that return a Promise that will resolve with the height of the chain
      */
     getChainHeight() {
+        console.log('in getChainHeight')
         return new Promise((resolve, reject) => {
             resolve(this.height);
         });
@@ -64,18 +65,22 @@ class Blockchain {
      */
     // private method
     _addBlock(block) {
-        let self = this;
+        const self = this;
         return new Promise(async (resolve, reject) => {
-                let chainHeight = await this.getChainHeight();
+            try {
+                const chainHeight = await this.getChainHeight();
                 block.height = chainHeight;
                 block.time = new Date().getTime().toString().slice(0,-3);
                 if (chainHeight > 0) {
                     block.previousBlockHash = self.chain[self.chain.length - 1].hash;
                     block.hash = SHA256(JSON.stringify(block)).toString();
-                    resolve(self.chain.push(block));
-                    block.height = chainHeight + 1;
                 }
-                reject(new Error(err)); 
+                block.height = chainHeight + 1;
+                self.chain.push(block)
+                resolve(block);
+            } catch (err) {
+                reject(err);
+            }
         });
     }
 
@@ -112,6 +117,7 @@ class Blockchain {
      * @param {*} star 
      */
     submitStar(address, message, signature, star) {
+        console.log('submitting star')
         let self = this;
         return new Promise(async (resolve, reject) => {
                 let time = parseInt(message.split(':')[1]);
@@ -120,7 +126,7 @@ class Blockchain {
                 if (currentTime - time < 300) {
                     // verify the bitcoin message was signed within 5 minutes
                     if (!bitcoinMessage.verify(message, address, signature)) {
-                        return reject(new Error('Message not verified'));
+                        return reject('Message not verified');
                     }
                     // how do we consolidate all the data to add to the block?
                     const data = {
@@ -133,7 +139,7 @@ class Blockchain {
                     resolve(await self._addBlock(block));
                 }
 
-                reject(new Error('Block must be verified within 5 minutes.'))
+                reject('Block must be verified within 5 minutes.');
         });
     }
 
@@ -144,6 +150,7 @@ class Blockchain {
      * @param {*} hash 
      */
     getBlockByHash(hash) {
+        console.log('getting the block by hash')
         let self = this;
         return new Promise((resolve, reject) => {
            resolve(self.chain.filter(block => block.hash === hash));
@@ -156,6 +163,7 @@ class Blockchain {
      * @param {*} height 
      */
     getBlockByHeight(height) {
+        console.log('getting the block by height')
         let self = this;
         return new Promise((resolve, reject) => {
             let block = self.chain.filter(p => p.height === height)[0];
@@ -174,6 +182,7 @@ class Blockchain {
      * @param {*} address 
      */
     getStarsByWalletAddress (address) {
+        console.log('getting the stars by wallet address')
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
@@ -194,6 +203,7 @@ class Blockchain {
      * 2. Each Block should check the with the previousBlockHash
      */
     validateChain() {
+        console.log('validating the chain')
         let self = this;
         let errorLog = [];
         return new Promise(async (resolve, reject) => {
