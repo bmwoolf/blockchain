@@ -118,6 +118,18 @@ class BlockchainController {
         });
     }
 
+    validateChain() {
+        this.app.get('/validateBlockChain', async (req, res) => {
+            let errorList = await this.blockchain.validateChain();
+            if (errorList.length > 0) {
+                return res.status(500).json(errorList);
+            } else {
+                return res.status(202).send("Success");
+            }
+
+        })
+    }
+
 }
 
 module.exports = (app, blockchainObj) => { return new BlockchainController(app, blockchainObj);}

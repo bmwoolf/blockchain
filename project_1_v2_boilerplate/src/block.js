@@ -55,6 +55,8 @@ class Block {
             }
         });
     }
+    //then/catch or
+    //async/await
 
     /**
      *  Auxiliary Method to return the block body (decoding the data)
