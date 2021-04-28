@@ -203,7 +203,7 @@ class Blockchain {
      * 1. You should validate each block using `validateBlock`
      * 2. Each Block should check the with the previousBlockHash
      */
-    validateChain() {
+    async validateChain() {
         console.log('validating the chain')
         let self = this;
         let errorLog = [];
