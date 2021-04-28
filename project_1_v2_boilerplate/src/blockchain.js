@@ -211,11 +211,13 @@ class Blockchain {
             self.chain.forEach((block) => {
                 if (block.height < 1) {
                     errorLog.push('Genesis block does not need verification')
+                    resolve(errorLog);
                 }
                 else {
                     let previousBlockHash = self.chain[block.height - 1].hash;
                     if (block.previousBlockHash !== previousBlockHash) {
                         errorLog.push({'error': `Idk something went wrong homie at block ${block.height}` });
+                        resolve(errorLog);
                     }
                 }
             })
