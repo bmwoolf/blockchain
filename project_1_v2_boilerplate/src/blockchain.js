@@ -135,7 +135,7 @@ class Blockchain {
                         star: star
                     }
                     // create block- what about the message?
-                    let block = new BlockClass.class(data)
+                    let block = new BlockClass.Block(data)
                     // add to chain
                     resolve(await self._addBlock(block));
                 }
